@@ -133,3 +133,33 @@ El shader también se ha integrado dentro del entorno de **Three.js** (`script.j
 ---
 
 ## **Enlace al CodeSandbox: https://codesandbox.io/p/sandbox/ig-s9-forked-lv287s**
+
+
+
+# Extra: Integración de Shader en Práctica S8 (Simulador Ferroviario 3D)
+
+![Vista previa del shader](shaderenfe.png)
+
+
+Como ampliación de la práctica, se ha integrado un `THREE.ShaderMaterial` personalizado dentro del proyecto de visualización de datos de Renfe (**S8**):
+* **Repositorio con la integración:** `https://github.com/Yenedey36/simulador-renfe-3d`
+
+### Motivación y Funcionamiento
+Para destacar visualmente sobre el mapa peninsular la estación inspeccionada o el tren en seguimiento activo, se ha creado un plano con transparencia (`transparent: true`) sobre el que se ejecuta un shader de fragmentos que genera ondas de radar concéntricas animadas:
+
+```glsl
+uniform float u_time;
+uniform vec3 u_color;
+varying vec2 vUv;
+
+void main() {
+  float d = distance(vUv, vec2(0.5));
+  float onda = sin(d * 35.0 - u_time * 4.0);
+  float anillo = smoothstep(0.1, 0.5, onda) * smoothstep(0.5, 0.05, d);
+  gl_FragColor = vec4(u_color, anillo * 0.85);
+}
+```
+
+* **Cálculo de ondas:** A partir de las coordenadas de textura `vUv` enviadas desde el vertex shader, se calcula la distancia radial al centro del plano (`vec2(0.5)`) y se modula con una función sinusoidal desplazada por `u_time`.
+* **Atenuación suave (Alpha blending):** Se multiplican dos funciones `smoothstep` para perfilar los anillos y desvanecer su opacidad suavemente hacia el borde exterior del plano, evitando cortes rectangulares sobre el mapa.
+* **Respuesta al estado:** A través del `uniform vec3 u_color`, el shader cambia dinámicamente a verde (`0x00ff88`) al inspeccionar los horarios de una estación y a naranja (`0xffaa00`) al acoplarse a la posición interpolada de un tren en ruta.
