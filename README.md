@@ -125,4 +125,11 @@ El shader también se ha integrado dentro del entorno de **Three.js** (`script.j
 
 ---
 
+## 5. Referencias
+
+* **Guion de Prácticas de Informática Gráfica (ULPGC)** — Sesión 9: *Shaders (Introducción a GLSL, Patrones, Generativos y Efectos inspirados en Vasarely)*.
+* **Three.js Documentation** — *ShaderMaterial*. Disponible en: https://threejs.org/docs/#api/en/materials/ShaderMaterial
+
+---
+
 ## **Enlace al CodeSandbox: https://codesandbox.io/p/sandbox/ig-s9-forked-lv287s**
